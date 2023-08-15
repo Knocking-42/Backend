@@ -1,0 +1,36 @@
+version: '3.4'
+services:
+  backend:
+    image: backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    env_file:
+      - ./backend/.env
+    restart: always
+    ports:
+      - 8888:8888
+    networks:
+      - knocking_dev
+    depends_on:
+      - db
+  db:
+    image: mysql
+    env_file:
+      - ./backend/.env
+    restart: always
+    expose:
+      - 3306
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - 3306:3306
+    networks:
+      - knocking_dev
+
+networks:
+  knocking_dev:
+    driver: bridge
+
+volumes:
+  db_data: {}
