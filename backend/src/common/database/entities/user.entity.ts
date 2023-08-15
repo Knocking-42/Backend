@@ -15,6 +15,6 @@ export class UserEntity {
     example: 'p@ssw0rd',
     description: '유저 패스워드',
   })
-  @Column({ type: 'varchar', length: 100, nullable: false })
+  @Column({ type: 'varchar', length: 100, nullable: true })
   password: string;
 }
