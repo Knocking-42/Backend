@@ -15,12 +15,12 @@ import { ApiModule } from './api/api.module';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
-        type: 'mysql',
-        host: configService.getOrThrow<string>('MYSQL_HOST'),
-        port: parseInt(configService.getOrThrow<string>('MYSQL_TCP_PORT'), 10),
-        username: configService.getOrThrow<string>('MYSQL_USER'),
-        password: configService.getOrThrow<string>('MYSQL_PASSWORD'),
-        database: configService.getOrThrow<string>('MYSQL_DATABASE'),
+        type: 'postgres',
+        host: configService.getOrThrow<string>('POSTGRES_HOST'),
+        port: parseInt(configService.getOrThrow<string>('POSTGRES_PORT'), 10),
+        username: configService.getOrThrow<string>('POSTGRES_USER'),
+        password: configService.getOrThrow<string>('POSTGRES_PASSWORD'),
+        database: configService.getOrThrow<string>('POSTGRES_DB'),
 
         namingStrategy: new SnakeNamingStrategy(),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
