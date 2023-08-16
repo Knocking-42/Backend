@@ -13,7 +13,7 @@ import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JwtAuthGuard } from 'common/auth/jwt/jwt-auth.guard';
 import { LoginService } from 'common/auth/login/login.service';
-import { UserEntity } from 'common/database/entities/user.entity';
+import { UserEntity } from 'common/database/user/user.entity';
 import { Request, Response } from 'express';
 import { Repository } from 'typeorm';
 import { LoginRequestDto } from './dto/login-request.dto';

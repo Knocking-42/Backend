@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { UserEntity } from 'common/database/entities/user.entity';
+import { UserEntity } from 'common/database/user/user.entity';
 import { LogisProfileDto } from './dto/register-response.dto';
 import { RegisterRequestDto } from './dto/user-register-request.dto';
 import { GetUserService } from './services/get-all-user.service';
