@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { InjectRepository } from '@nestjs/typeorm';
+import { AuthUser } from 'common/auth/auth-user.decorator';
 import { JwtAuthGuard } from 'common/auth/jwt/jwt-auth.guard';
 import { LoginService } from 'common/auth/login/login.service';
 import { UserEntity } from 'common/database/user/user.entity';
@@ -42,6 +43,7 @@ export class AuthController {
   }
 
   @Get('google')
+  @GoogleAuth()
   @ApiOperation({ summary: '구글 로그인' })
   async googlelAuth(): Promise<void> {
     return;
@@ -49,10 +51,11 @@ export class AuthController {
 
   @Get('google/callback')
   @GoogleAuth()
-  async googleAuthRedirect(@Req() req: Request): Promise<void> {
-    const user = req.user;
-
-    await this.userRepository.save();
+  async googleCallback(
+    @AuthUser() profile: UserEntity,
+    @Res() res: Response,
+  ): Promise<void> {
+    return await this.loginService.googleLogin(profile, res);
   }
 
   @Get('test')
