@@ -9,7 +9,7 @@ services:
       - ./backend/.env
     restart: always
     ports:
-      - 8888:8888
+      - ${BACKEND_PORT}:${BACKEND_PORT}
     networks:
       - knocking_dev
     depends_on:
@@ -20,11 +20,11 @@ services:
       - ./backend/.env
     restart: always
     expose:
-      - 5432
+      - ${DB_PORT}
     volumes:
       - db_data:/var/lib/postgresql/data
     ports:
-      - 5432:5432
+      - ${DB_PORT}:${DB_PORT}
     networks:
       - knocking_dev
 
