@@ -1,11 +1,10 @@
-import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { CookieManager } from 'common/auth/cookie/cookie.manager';
 import { JwtPaylaod } from 'common/auth/jwt/jwt.payload';
 import { LoginService } from 'common/auth/login/login.service';
-import { pwCompare } from 'common/utils/encrypt';
+import { UserEntity } from 'common/database/user';
 import { Response } from 'express';
-import { LoginRequestDto } from '../dto/login-request.dto';
 
 @Injectable()
 export class AuthService {
@@ -16,16 +15,7 @@ export class AuthService {
     private readonly cookieManager: CookieManager,
   ) {}
 
-  async login(response: Response, loginDto: LoginRequestDto): Promise<void> {
-    const user = await this.loginService.loginByName(loginDto.name);
-
-    if (!pwCompare(loginDto.password, user.password)) {
-      this.logger.verbose(
-        `${AuthService.name} login: Invalid password: ${loginDto.password}, ${user.password}`,
-      );
-      throw new UnauthorizedException('Invalid password');
-    }
-
+  async login(response: Response, user: UserEntity): Promise<void> {
     const jwt = this.jwtService.sign({ id: user.id } as JwtPaylaod);
 
     this.cookieManager.set(response, {

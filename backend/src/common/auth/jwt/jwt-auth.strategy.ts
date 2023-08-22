@@ -1,7 +1,7 @@
 import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
-import { UserEntity } from 'common/database/entities/user.entity';
+import { UserEntity } from 'common/database/user/user.entity';
 import { Request } from 'express';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { LoginService } from '../login/login.service';
