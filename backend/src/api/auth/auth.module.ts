@@ -6,6 +6,7 @@ import { JwtModule } from 'common/auth/jwt/jwt.module';
 import { LoginModule } from 'common/auth/login/login.module';
 import { UserEntity } from 'common/database/user/user.entity';
 import { AuthController } from './auth.controller';
+import { GoogleAuthStrategy } from './google-auth/google-auth.strategy';
 import { AuthService } from './services/auth.services';
 
 @Module({
@@ -15,7 +16,7 @@ import { AuthService } from './services/auth.services';
     JwtModule.forRoot(),
     CookieManagerModule,
   ],
-  providers: [AuthService, JwtAuthStrategy],
+  providers: [AuthService, JwtAuthStrategy, GoogleAuthStrategy],
   controllers: [AuthController],
 })
 export class AuthModule {}

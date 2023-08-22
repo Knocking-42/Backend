@@ -1,30 +1,41 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import { OauthRepository, OauthType } from 'common/database/oauth';
+import { UserRepository } from 'common/database/user';
 import { UserEntity } from 'common/database/user/user.entity';
-import { Repository } from 'typeorm';
 
 @Injectable()
 export class LoginService {
   constructor(
-    @InjectRepository(UserEntity)
-    private readonly userRepository: Repository<UserEntity>,
+    private readonly userRepository: UserRepository,
+    private readonly oauthRepository: OauthRepository,
   ) {}
 
-  async loginByName(userName: string): Promise<UserEntity> {
-    const user = await this.userRepository.findOneBy({
-      username: userName,
-    });
+  async loginByOauth(
+    oauthProfile: any,
+    oauthType: OauthType,
+  ): Promise<UserEntity> {
+    const user = await this.oauthRepository.findByOauthId(
+      oauthProfile.id,
+      oauthType,
+    );
 
     if (!user) {
-      throw new UnauthorizedException();
+      const user = await this.userRepository.create(
+        oauthProfile.name,
+        oauthProfile.email,
+      );
+      await this.oauthRepository.create(
+        user.id,
+        oauthProfile.providerId,
+        oauthType,
+      );
+      return user;
     }
     return user;
   }
 
   async loginById(userId: number): Promise<UserEntity> {
-    const user = await this.userRepository.findOneBy({
-      id: userId,
-    });
+    const user = await this.userRepository.findByUserId(userId);
 
     if (!user) {
       throw new UnauthorizedException();

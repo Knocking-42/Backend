@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserEntity } from 'common/database/user/user.entity';
+import { OauthRepositoryModule } from 'common/database/oauth';
+import { UserRepositoryModule } from 'common/database/user';
 import { LoginService } from './login.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserEntity])],
+  imports: [UserRepositoryModule, OauthRepositoryModule],
   providers: [LoginService],
   exports: [LoginService],
 })
