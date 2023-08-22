@@ -15,6 +15,7 @@ import { OauthType } from 'common/database/oauth';
 import { Request, Response } from 'express';
 import { GoogleAuth } from './google-auth';
 import { GoogleProfile } from './google-auth/google-profile';
+import { KakaoAuth } from './kakao-auth/kakao-auth.decorator';
 import { AuthService } from './services/auth.services';
 
 @ApiTags('Auth')
@@ -47,6 +48,28 @@ export class AuthController {
       profile,
       OauthType.GOOGLE,
     );
+
+    await this.authService.login(res, user);
+  }
+
+  @Get('kakao')
+  @KakaoAuth()
+  @ApiOperation({
+    summary: '카카오 로그인',
+    description:
+      "카카오 로그인 페이지로 리다이렉트 <a href='/auth/kakao/'> Please cmd + click me! </a>",
+  })
+  async kakaoAuth(): Promise<void> {
+    return;
+  }
+
+  @Get('kakao/callback')
+  @KakaoAuth()
+  async kakaoCallback(
+    @AuthUser() profile: any, // TODO: kakao profile type
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<void> {
+    const user = await this.loginService.loginByOauth(profile, OauthType.KAKAO);
 
     await this.authService.login(res, user);
   }
