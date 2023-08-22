@@ -6,7 +6,8 @@ import { JwtModule } from 'common/auth/jwt/jwt.module';
 import { LoginModule } from 'common/auth/login/login.module';
 import { UserEntity } from 'common/database/user/user.entity';
 import { AuthController } from './auth.controller';
-import { GoogleAuthStrategy } from './google-auth/google-auth.strategy';
+import { GoogleAuthModule } from './google-auth';
+import { KakaoAuthModule } from './kakao-auth/kakaol-auth.module';
 import { AuthService } from './services/auth.services';
 
 @Module({
@@ -15,8 +16,10 @@ import { AuthService } from './services/auth.services';
     LoginModule,
     JwtModule.forRoot(),
     CookieManagerModule,
+    GoogleAuthModule,
+    KakaoAuthModule,
   ],
-  providers: [AuthService, JwtAuthStrategy, GoogleAuthStrategy],
+  providers: [AuthService, JwtAuthStrategy],
   controllers: [AuthController],
 })
 export class AuthModule {}
