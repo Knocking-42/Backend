@@ -12,6 +12,6 @@ export class UserEntity {
   name: string;
 
   @ApiProperty({ example: 'skyrich2000@gmail.com', description: '유저 이메일' })
-  @Column({ type: 'varchar', length: 30, nullable: false })
-  email: string;
+  @Column({ type: 'varchar', length: 30, nullable: true }) // 카카오 이메일은 없을수도 있다고 함.
+  email?: string;
 }
