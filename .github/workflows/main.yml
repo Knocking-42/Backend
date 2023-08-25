@@ -12,36 +12,21 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Deploy to EC2
+      - name: Execute commands on remote server
         env:
           PRIVATE_KEY: ${{ secrets.SSH_BENEFIT }}
           HOST: ${{ secrets.EC2_HOST }}
           USERNAME: ${{ secrets.EC2_USERNAME }}
-          PATH: ${{ secrets.BACK_PATH }}
+          SERVER_PATH: ${{ secrets.BACK_PATH }}
         run: |
           echo "$PRIVATE_KEY" > private_key.pem
-          /bin/chmod 600 private_key.pem
+          chmod 600 private_key.pem
 
-          # 프로젝트의 최상단과 backend 폴더의 .env는 EC2 내에서 백업
-          ssh -i private_key.pem $USERNAME@$HOST << 'ENDSSH'
-            cp $PATH/.env $PATH/.env_backup
-            cp $PATH/backend/.env $PATH/backend/.env_backup
-          ENDSSH
+          ssh -o StrictHostKeyChecking=no -i private_key.pem $USERNAME@$HOST <<EOF
+            cd $SERVER_PATH
+            git pull
+            docker-compose down
+            docker-compose up -d
+          EOF
 
-          # 변경사항 반영
-          rsync -avz -e "ssh -i private_key.pem" --exclude='.env' . $USERNAME@$HOST:$PATH/
-
-          # EC2 내의 .env 파일 복원
-          ssh -i private_key.pem $USERNAME@$HOST << 'ENDSSH'
-            mv $PATH/.env_backup $PATH/.env
-            mv $PATH/backend/.env_backup $PATH/backend/.env
-          ENDSSH
-
-          # 서버 재시작 명령 (예: docker-compose 재시작)
-          ssh -i private_key.pem $USERNAME@$HOST "cd $PATH && docker-compose down && docker-compose up -d"
-
-          # 생성된 임시 파일 삭제
           rm -f private_key.pem
