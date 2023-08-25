@@ -23,7 +23,7 @@ jobs:
           PATH: ${{ secrets.BACK_PATH }}
         run: |
           echo "$PRIVATE_KEY" > private_key.pem
-          chmod 600 private_key.pem
+          /bin/chmod 600 private_key.pem
 
           # 프로젝트의 최상단과 backend 폴더의 .env는 EC2 내에서 백업
           ssh -i private_key.pem $USERNAME@$HOST << 'ENDSSH'
