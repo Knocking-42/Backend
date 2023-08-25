@@ -1,16 +1,13 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { CookieManager } from 'common/auth/cookie/cookie.manager';
 import { JwtPaylaod } from 'common/auth/jwt/jwt.payload';
-import { LoginService } from 'common/auth/login/login.service';
 import { UserEntity } from 'common/database/user';
 import { Response } from 'express';
 
 @Injectable()
 export class AuthService {
-  private readonly logger: Logger = new Logger(AuthService.name);
   constructor(
-    private readonly loginService: LoginService,
     private readonly jwtService: JwtService,
     private readonly cookieManager: CookieManager,
   ) {}
@@ -22,6 +19,8 @@ export class AuthService {
       name: 'knocking',
       value: jwt,
     });
+
+    response.redirect('http://localhost:3000');
   }
 
   signout(response: Response): void {
