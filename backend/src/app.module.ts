@@ -25,7 +25,7 @@ import { ApiModule } from './api/api.module';
         namingStrategy: new SnakeNamingStrategy(),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
         synchronize: true,
-        logging: true,
+        logging: false,
       }),
     }),
     ApiModule,
